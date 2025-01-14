@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ultimate VR Game</title>
+    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-extras@7.5.2/dist/aframe-extras.min.js"></script>
+</head>
+<body>
+    <a-scene>
+        <!-- ฉากหลัง 360 องศา -->
+        <a-sky src="P1.jpg"></a-sky>
+
+        <!-- ข้อความแนะนำ อยู่ด้านบน -->
+        <a-entity text="value: Jeerawan Singkin 653380191-9 sec2; color: #FF6347; align: center; width: 12" 
+                  position="0 6 -12">
+        </a-entity>
+
+        <!-- โมเดลตัวละคร พร้อมเคลื่อนไหว -->
+        <a-entity gltf-model="Character Soldier.glb" 
+                  animation-mixer 
+                  scale="1.5 1.5 1.5" 
+                  position="-4 0 -6"
+                  animation="property: position; to: -4 0 -5; dur: 2000; dir: alternate; loop: true">
+        </a-entity>
+
+        <a-entity gltf-model="Zombie.glb" 
+                  animation-mixer 
+                  scale="1.5 1.5 1.5" 
+                  position="4 0 -6"
+                  animation="property: position; to: 4 0 -5; dur: 2000; dir: alternate; loop: true">
+        </a-entity>
+
+        <a-entity gltf-model="Mazda RX-7.glb" 
+                  scale="2 2 2" 
+                  position="6 0 -12"
+                  animation="property: position; to: 6 0 -10; dur: 3000; dir: alternate; loop: true">
+        </a-entity>
+
+        <!-- แสงในฉาก -->
+        <a-light type="ambient" color="#ffffff" intensity="0.8"></a-light>
+        <a-light type="spot" color="#FFD700" intensity="2" position="0 10 -5" angle="45"></a-light>
+        <a-light type="point" color="#FF4500" intensity="1.5" position="-4 3 -6"></a-light>
+        <a-light type="point" color="#1E90FF" intensity="1.5" position="4 3 -6"></a-light>
+
+        <!-- พื้นผิว -->
+        <a-plane 
+            position="0 0 -8" 
+            rotation="-90 0 0" 
+            width="50" 
+            height="50" 
+            material="src: ground-texture.jpg; repeat: 10 10; roughness: 0.8">
+        </a-plane>
+
+        <!-- เสียงประกอบ -->
+        <a-sound src="path-to-your-audio.mp3" autoplay="true" loop="true"></a-sound>
+    </a-scene>
+</body>
+</html>
