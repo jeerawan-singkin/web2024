@@ -1,1 +1,171 @@
+import { useState } from "react";
+import { Text, View, StyleSheet, TouchableOpacity, ImageBackground } from "react-native";
+import { CameraView, useCameraPermissions } from "expo-camera";
+import { Ionicons } from "@expo/vector-icons";
+
+
+export default function FaceView() {
+  const [facing, setFacing] = useState("front");
+  const [permission, requestPermission] = useCameraPermissions();
+  const [zoom, setZoom] = useState(0.5);
+
+  if (!permission) {
+    return (
+      <View style={styles.container}>
+        <Text>ไม่มีกล้อง</Text>
+      </View>
+    );
+  }
+  if (!permission.granted) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.message}>
+          เราต้องการสิทธิ์เข้าถึงกล้องของคุณ
+        </Text>
+        <TouchableOpacity style={styles.permissionButton} onPress={requestPermission}>
+          <Text style={styles.buttonText}>ให้สิทธิ์</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+
+  function toggleFace() {
+    setFacing((current) => (current === "back" ? "front" : "back"));
+  }
+
+  function Zoom(z) {
+    let newZoom = Math.min(Math.max(zoom + z, 0), 1);
+    setZoom(newZoom);
+  }
+
+  return (
+<ImageBackground source={require("./assets/a2.jpeg")} style={styles.backgroundImage}>
+  <View style={styles.container}>
+    {/* กล้องขนาดเล็ก */}
+    <View style={styles.cameraWrapper}>
+      <CameraView style={styles.camera} facing={facing} zoom={zoom}>
+        {/* ปุ่มควบคุม */}
+        <View style={styles.overlay}>
+          <TouchableOpacity style={styles.toggleButton} onPress={toggleFace}>
+            <Ionicons name="camera-reverse" size={28} color="white" />
+          </TouchableOpacity>
+
+          <View style={styles.zoomControls}>
+            <TouchableOpacity style={styles.zoomButton} onPress={() => Zoom(-0.1)}>
+              <Ionicons name="remove" size={24} color="white" />
+            </TouchableOpacity>
+            <Text style={styles.zoomText}>{(zoom * 10).toFixed(1)}x</Text>
+            <TouchableOpacity style={styles.zoomButton} onPress={() => Zoom(0.1)}>
+              <Ionicons name="add" size={24} color="white" />
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        {/* แสดงสถานะกล้อง */}
+        <Text style={styles.facingText}>
+          {facing === "back" ? "📷 กล้องหลัง" : "🤳 กล้องหน้า"}
+        </Text>
+      </CameraView>
+    </View>
+
+    {/* ข้อมูลเว็บไซต์และชื่อผู้จัดทำ */}
+    <View style={styles.infoContainer}>
+      <Text style={styles.websiteName}>Work5: Camera</Text>
+      <Text style={styles.authorName}>653380191-9 จีรวรรณ สิงห์กลิ่น</Text>
+    </View>
+  </View>
+</ImageBackground>
+  );
+}
+
+const styles = StyleSheet.create({
+  backgroundImage: {
+  flex: 1,
+  resizeMode: "cover", // ทำให้รูปเต็มหน้าจอ
+  width: "100%",
+  height: "100%",
+  position: "absolute", // ให้แนบไปกับพื้นหลัง
+},
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "transparent", // เห็นพื้นหลัง
+  },
+  cameraWrapper: {
+    width: "70%", // กำหนดขนาดกล้องให้เล็กลง
+    height: "40%", // ลดขนาดกล้องเหลือ 40% ของหน้าจอ
+    borderRadius: 15,
+    overflow: "hidden",
+    borderWidth: 2,
+    borderColor: "white", // กรอบสีขาวเพื่อให้กล้องดูโดดเด่น
+  },
+  camera: {
+    flex: 1,
+  },
+  overlay: {
+    position: "absolute",
+    bottom: 5,
+    left: 5,
+    right: 5,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    backgroundColor: "rgba(0,0,0,0.5)",
+    borderRadius: 15,
+    padding: 10,
+  },
+  toggleButton: {
+    padding: 10,
+  },
+  zoomControls: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  zoomButton: {
+    padding: 10,
+  },
+  zoomText: {
+    color: "white",
+    fontSize: 18,
+    fontWeight: "bold",
+    marginHorizontal: 10,
+  },
+  facingText: {
+    position: "absolute",
+    top: 10,
+    alignSelf: "center",
+    color: "white",
+    fontSize: 18,
+    fontWeight: "bold",
+    backgroundColor: "rgba(0,0,0,0.5)",
+    padding: 8,
+    borderRadius: 10,
+  },
+  infoContainer: {
+    marginTop: 20,
+    alignItems: "center",
+  },
+  websiteName: {
+    fontSize: 16,
+    color: "black",
+    fontWeight: "bold",
+  },
+  authorName: {
+    fontSize: 14,
+    color: "gray",
+  },
+  permissionButton: {
+    backgroundColor: "#4CAF50",
+    padding: 10,
+    borderRadius: 5,
+    marginTop: 10,
+  },
+  buttonText: {
+    color: "white",
+    fontWeight: "bold",
+    fontSize: 16,
+    textAlign: "center",
+  },
+});
 
